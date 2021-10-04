@@ -13,7 +13,7 @@ import (
 
 type redis struct{ pool *redisClient.Pool }
 
-func New(host, port, password string) (storage.Service, error) {
+func New(host, port string) (storage.Service, error) {
 	pool := &redisClient.Pool{
 		MaxIdle:     10,
 		IdleTimeout: 240 * time.Second,
