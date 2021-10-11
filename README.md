@@ -6,9 +6,9 @@ A RESTful web service build on top of **Redis** and **Go**.
 
 ## Start a service
 
-docker build . -t url-short
-
-docker run -p 8080:8080 url-short
+```sh
+docker-compose up
+```
 
 ## Usage
 
@@ -21,17 +21,20 @@ docker run -p 8080:8080 url-short
 A handler that encodes your link into number with base 62 and length 10.
 
 **Request**:  
-type _json_  
-{  
- "url":"https://codex.so/link-shortener",  
- "expires":"2021-10-10 11:11:11"
+type _json_
+
+```json
+{
+  "url": "https://codex.so/link-shortener",
+  "expires": "2021-10-10 11:11:11"
 }
+```
 
 **Response**:  
 type _json_  
 {  
  "shortUrl":"https://localhost:8080/xxxxxxxxxx",  
- "success": true
+ "success": true  
 }
 
 ### Redirect link
