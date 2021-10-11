@@ -18,8 +18,8 @@ FROM scratch
 
 COPY --from=builder /dist/url-short /app/
 
-COPY conf.json /app/
+# COPY conf.json /app/
 
-WORKDIR /app
+# WORKDIR /app
 
-CMD ["./url-short"]
+# CMD ["./url-short"]

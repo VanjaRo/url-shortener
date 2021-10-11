@@ -72,11 +72,12 @@ func (h handler) encode(ctx *fasthttp.RequestCtx) (interface{}, int, error) {
 		return nil, http.StatusBadRequest, fmt.Errorf("invalid url")
 	}
 
-	layoutISO := "1999-01-01 11:11:11"
+	layoutISO := "2006-01-02 15:04:05"
 	expires, err := time.Parse(layoutISO, input.Expires)
 	if err != nil {
 		return nil, http.StatusBadRequest, fmt.Errorf("invalid expiration date")
 	}
+	// expires = "2022-01-01 11:11:11"
 
 	c, err := h.storage.Save(uri.String(), expires)
 	if err != nil {
@@ -113,5 +114,5 @@ func (h handler) redirect(ctx *fasthttp.RequestCtx) {
 		ctx.Response.SetStatusCode(http.StatusNotFound)
 		return
 	}
-	ctx.Redirect(uri, http.StatusMovedPermanently)
+	ctx.Redirect(uri, http.StatusTemporaryRedirect)
 }

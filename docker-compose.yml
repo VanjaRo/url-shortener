@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    working_dir: /app
+    command: ./url-short
+    depends_on:
+      - redis
+    ports:
+      - 8080:8080
+    volumes:
+      - ./conf.json:/app/conf.json
+
+  redis:
+    image: redis:6.0.9
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
+volumes:
+  redis-data:
