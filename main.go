@@ -18,10 +18,12 @@ func main() {
 	service, err := redis.New(conf.Redis.Host, conf.Redis.Port)
 	if err != nil {
 		log.Fatal(err)
+		log.Println(conf.Redis.Host)
+		log.Println(conf.Redis.Port)
 	}
 	defer service.Close()
 
 	router := handler.New(conf.Options.Schema, conf.Options.Prefix, service)
 
-	log.Fatal(fasthttp.ListenAndServe(":" + conf.Server.Port, router.Handler))
+	log.Fatal(fasthttp.ListenAndServe(":"+conf.Server.Port, router.Handler))
 }

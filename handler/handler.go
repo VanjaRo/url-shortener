@@ -77,7 +77,6 @@ func (h handler) encode(ctx *fasthttp.RequestCtx) (interface{}, int, error) {
 	if err != nil {
 		return nil, http.StatusBadRequest, fmt.Errorf("invalid expiration date")
 	}
-	// expires = "2022-01-01 11:11:11"
 
 	c, err := h.storage.Save(uri.String(), expires)
 	if err != nil {

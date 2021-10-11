@@ -28,7 +28,7 @@ func (r *redis) isUsed(id uint64) bool {
 	conn := r.pool.Get()
 	defer conn.Close()
 
-	exists, err := redisClient.Bool(conn.Do("EXISTS", strconv.FormatUint(id, 10)))
+	exists, err := redisClient.Bool(conn.Do("EXISTS", "Shortener:"+strconv.FormatUint(id, 10)))
 	if err != nil {
 		return false
 	}
@@ -48,15 +48,16 @@ func (r *redis) Save(url string, expires time.Time) (string, error) {
 	shortLink := storage.Item{
 		id,
 		url,
-		expires.Format("1999-01-01 11:11:11.000000 +0300 EEST"),
+		expires.Format("2006-01-02 15:04:05.728046 +0300 EEST"),
 		0,
 	}
-	_, err := conn.Do("HMSET", redisClient.Args{"Shotener:" + strconv.FormatUint(id, 10)}.AddFlat(shortLink)...)
+
+	_, err := conn.Do("HSET", redisClient.Args{"Shortener:" + strconv.FormatUint(id, 10)}.AddFlat(shortLink)...)
 	if err != nil {
 		return "", err
 	}
 
-	_, err = conn.Do("EXPIREAT", "Shotener:"+strconv.FormatUint(id, 10), expires.Unix())
+	_, err = conn.Do("EXPIREAT", "Shortener:"+strconv.FormatUint(id, 10), expires.Unix())
 	if err != nil {
 		return "", err
 	}
@@ -74,14 +75,14 @@ func (r *redis) Load(code string) (string, error) {
 		return "", err
 	}
 
-	urlString, err := redisClient.String(conn.Do("HGET", "Shortener: "+strconv.FormatUint(decodedId, 10), "url"))
+	urlString, err := redisClient.String(conn.Do("HGET", "Shortener:"+strconv.FormatUint(decodedId, 10), "url"))
 	if err != nil {
-		return "", nil
+		return "", err
 	} else if len(urlString) == 0 {
 		return "", storage.ErrNoLink
 	}
 
-	conn.Do("HINCBY", "Shortener: "+strconv.FormatUint(decodedId, 10), "visits", 1)
+	conn.Do("HINCRBY", "Shortener:"+strconv.FormatUint(decodedId, 10), "visits", 1)
 
 	return urlString, nil
 }
@@ -95,7 +96,7 @@ func (r *redis) LoadInfo(code string) (*storage.Item, error) {
 		return nil, err
 	}
 
-	values, err := redisClient.Values(conn.Do("HGETALL", "Shortener: "+strconv.FormatUint(decodedId, 10)))
+	values, err := redisClient.Values(conn.Do("HGETALL", "Shortener:"+strconv.FormatUint(decodedId, 10)))
 	if err != nil {
 		return nil, err
 	} else if len(values) == 0 {

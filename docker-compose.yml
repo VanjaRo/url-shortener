@@ -7,6 +7,7 @@ services:
       context: .
     working_dir: /app
     command: ./url-short
+    stdin_open: true
     depends_on:
       - redis
     ports:
