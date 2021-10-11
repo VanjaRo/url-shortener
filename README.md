@@ -31,11 +31,14 @@ type _json_
 ```
 
 **Response**:  
-type _json_  
-{  
- "shortUrl":"https://localhost:8080/xxxxxxxxxx",  
- "success": true  
+type _json_
+
+```json
+{
+  "shortUrl": "https://localhost:8080/xxxxxxxxxx",
+  "success": true
 }
+```
 
 ### Redirect link
 
@@ -50,12 +53,14 @@ Simply redirects you to the previously encoded link, incresasing a view counter.
 
 **Response**:
 
-{  
- "shortUrl":{  
-"id": 1,  
-"url": "http://localhost:8080/xxxxxxxxxx",  
-"expires": "2021-10-10 11:11:11",  
-"visits": 1  
-},  
- "success": true
+```json
+{
+  "shortUrl": {
+    "id": 1,
+    "url": "http://localhost:8080/xxxxxxxxxx",
+    "expires": "2021-10-10 11:11:11",
+    "visits": 1
+  },
+  "success": true
 }
+```
